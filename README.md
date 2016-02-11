@@ -1,4 +1,4 @@
-# netzplan
+# KW Netzplan
 Netzplanverwaltung für das Wohnheim Kellnerweg
 
 ## Kompilieren
@@ -60,3 +60,70 @@ Hinweise zur Position:
      1: 1. Gerät von oben
      2: 2. Gerät von oben
      ...
+
+
+## API
+
+    enum Medium {
+        kupfer,
+        glas
+    };
+    
+    enum VTyp {
+        verkabelung,
+        patchung
+    };
+    
+    class Geraet {
+    public:
+        int house();
+        int apt();
+        int pos();
+        str name();
+        str mac();
+        str serial();
+        str comment();
+        Geraetetyp* type();
+    
+        vec<Verbindung> patches();
+        vec<Verbindung> cables();
+    
+        void delete(); /* Not implemented yet */
+        void removeAllPatches(); /* Not implemented yet */
+        void removeAllCables(); /* Not implemented yet */
+    };
+    
+    class Geraetetyp {
+    public:
+        str name();
+        int n_ports();
+        str brand();
+        str model();
+        str comment();
+    };
+    
+    class Verbindung {
+    public:
+        VTyp type();
+        Medium medium();
+        
+        std::shared_ptr<Geraet> loc_dev();
+        unsigned loc_port();
+        std::shared_ptr<Geraet> rem_dev();
+        unsigned rem_port();
+    
+        void delete(); /* Not implemented yet */
+    };
+    
+    class NetzplanDatenbank {
+    public:
+        NetzplanDatenbank(str db_user, str db_pw, str db_dbname);
+    
+        vec<Geraet> wohnung(int house, int apt);
+        shared_ptr<Geraet> geraet(int house, int apt, int pos);
+    
+        void newDevice(int house, int apt, int pos, Geraetetyp *typ);  /* Not implemented yet */
+        void newDeviceType(str name, int n_ports, str brand, str model, str comment = "");  /* Not implemented yet */
+        void newCable(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
+        void newPatch(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
+    };
