@@ -1,3 +1,6 @@
+#ifndef ORM_H
+#define ORM_H
+
 #include <string>
 #include <map>
 #include <vector>
@@ -195,3 +198,5 @@ vec<Verbindung> NetzplanDatenbank::connection(unsigned gid, VTyp typ, std::share
 
     return v;
 }
+
+#endif /* ORM_H */
