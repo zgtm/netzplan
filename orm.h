@@ -74,6 +74,8 @@ public:
     int loc_port() { return ports[0]; }
     std::shared_ptr<Geraet> rem_dev();
     int rem_port() { return ports[1]; }
+    
+    void delete(); /* Not implemented yet */
 };
 
 class Geraet;
@@ -84,8 +86,14 @@ private:
     std::map<unsigned, Geraetetyp*> geraetetypen;
 
 public:
-    NetzplanDatenbank(str, str, str);
-    vec<Geraet> wohnung(int, int);
+    NetzplanDatenbank(str db_user, str db_pw, str db_dbname);
+    vec<Geraet> wohnung(int house, int pos);
+    
+    shared_ptr<Geraet> geraet(int house, int apt, int pos);  /* Not implemented yet */
+    void newDevice(int house, int apt, int pos, Geraetetyp *typ);  /* Not implemented yet */
+    void newDeviceType(str name, int n_ports, str brand, str model, str comment = "");  /* Not implemented yet */
+    void newCable(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
+    void newPatch(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
     
     /* Should not be used */
     Geraetetyp* findType(unsigned);
@@ -124,6 +132,10 @@ public:
 
     vec<Verbindung> patches() { return db->connection(id, VTyp::patchung, self.lock()); }
     vec<Verbindung> cables() { return db->connection(id, VTyp::verkabelung, self.lock()); }
+    
+    void delete(); /* Not implemented yet */
+    void removeAllPatches(); /* Not implemented yet */
+    void removeAllCables(); /* Not implemented yet */
 };
 
 vec<Verbindung> NetzplanDatenbank::connection(unsigned gid, VTyp typ, std::shared_ptr<Geraet> origin) {
