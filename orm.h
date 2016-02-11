@@ -47,11 +47,19 @@ private:
     NetzplanDatenbank *db;
 
 public:
+    // getter
     str name() {return _name;}
     int n_ports() {return _n_ports;}
     str brand() {return _brand;}
     str model() {return _model;}
     str comment() {return _comment;}
+    
+    // setter /* Not implemented yet */
+    void name(str);
+    void n_ports(int);
+    void brand(str);
+    void model(str);
+    void comment(str);
 };
 
 class Geraet;
@@ -68,12 +76,17 @@ private:
     NetzplanDatenbank* db;
 
 public:
+    // getter
     VTyp type() { return _type; }
     Medium medium() { return _medium; }
     std::shared_ptr<Geraet> loc_dev() { return devices[0]; }
     int loc_port() { return ports[0]; }
     std::shared_ptr<Geraet> rem_dev();
     int rem_port() { return ports[1]; }
+    
+    // setter  /* Not implemented yet */
+    void type(VTyp);
+    void medium(Medium);
     
     void delete(); /* Not implemented yet */
 };
@@ -95,7 +108,7 @@ public:
     void newCable(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
     void newPatch(Geraet* from, Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
     
-    /* Should not be used */
+    /* Should not be used (perhaps gonna become private) */
     Geraetetyp* findType(unsigned);
     std::shared_ptr<Geraet> geraetbyid(unsigned);
     vec<Verbindung> connection(unsigned, VTyp, std::shared_ptr<Geraet>);
@@ -121,6 +134,7 @@ private:
     std::weak_ptr<Geraet> self;
 
 public:
+    // getter 
     int house() {return _house;}
     int apt() {return _apt;}
     int pos() {return _pos;}
@@ -132,6 +146,19 @@ public:
 
     vec<Verbindung> patches() { return db->connection(id, VTyp::patchung, self.lock()); }
     vec<Verbindung> cables() { return db->connection(id, VTyp::verkabelung, self.lock()); }
+    
+    // setter /* Not implemented yet */
+    void house(int);
+    void apt(int);
+    void pos(int);
+    void name(str);
+    void mac(str);
+    void serial(str);
+    void comment(str);
+    void type(Geraetetyp*);
+    
+    void addCable(Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
+    void addPatch(Geraet* to, unsigned from_port, unsigned to_port);  /* Not implemented yet */
     
     void delete(); /* Not implemented yet */
     void removeAllPatches(); /* Not implemented yet */
