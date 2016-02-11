@@ -34,7 +34,10 @@ VTyp strtotyp(str s) { return (s == "patchung" ? VTyp::patchung : VTyp::verkabel
 
 class NetzplanDatenbank;
 class Geraetetyp {
-    private:
+private:
+    friend class NetzplanDatenbank; 
+    Geraetetyp(unsigned id, str name, unsigned nports, str brand, str model, str comment, NetzplanDatenbank *db) : id(id), _name(name), _n_ports(nports), _brand(brand), _model(model), _comment(comment), db(db) {};
+    
     unsigned id;
     str _name;
     unsigned _n_ports;
@@ -43,9 +46,7 @@ class Geraetetyp {
     str _comment;
     NetzplanDatenbank *db;
 
-    public:
-    Geraetetyp(unsigned id, str name, unsigned nports, str brand, str model, str comment, NetzplanDatenbank *db) : id(id), _name(name), _n_ports(nports), _brand(brand), _model(model), _comment(comment), db(db) {};
-
+public:
     str name() {return _name;}
     int n_ports() {return _n_ports;}
     str brand() {return _brand;}
@@ -55,8 +56,10 @@ class Geraetetyp {
 
 class Geraet;
 class Verbindung {
-    private:
-    //unsigned id;
+private:
+    friend class NetzplanDatenbank; 
+    Verbindung(VTyp type, Medium medium, unsigned dev1, unsigned dev2, unsigned port1, unsigned port2, std::shared_ptr<Geraet> local, NetzplanDatenbank* db) : _type(type), _medium(medium), devids{dev1, dev2}, ports{port1, port2}, devices{local, 0}, db(db) {};
+    
     VTyp _type;
     Medium _medium;
     unsigned devids[2];
@@ -64,9 +67,7 @@ class Verbindung {
     std::shared_ptr<Geraet> devices[2];
     NetzplanDatenbank* db;
 
-    public:
-    Verbindung(VTyp type, Medium medium, unsigned dev1, unsigned dev2, unsigned port1, unsigned port2, std::shared_ptr<Geraet> local, NetzplanDatenbank* db) : _type(type), _medium(medium), devids{dev1, dev2}, ports{port1, port2}, devices{local, 0}, db(db) {};
-
+public:
     VTyp type() { return _type; }
     Medium medium() { return _medium; }
     std::shared_ptr<Geraet> loc_dev() { return devices[0]; }
@@ -77,13 +78,16 @@ class Verbindung {
 
 class Geraet;
 class NetzplanDatenbank {
-    private:
+private:
     sql::mysql::MySQL_Driver *driver;
     sql::Connection *con;
     std::map<unsigned, Geraetetyp*> geraetetypen;
-    public:
+
+public:
     NetzplanDatenbank(str, str, str);
     vec<Geraet> wohnung(int, int);
+    
+    /* Should not be used */
     Geraetetyp* findType(unsigned);
     std::shared_ptr<Geraet> geraetbyid(unsigned);
     vec<Verbindung> connection(unsigned, VTyp, std::shared_ptr<Geraet>);
@@ -91,7 +95,11 @@ class NetzplanDatenbank {
 
 
 class Geraet {
-    private:
+private:
+    friend class NetzwerkDatenbank;
+    Geraet(unsigned id, int house, int apt, int pos, str name, str mac, str serial, str comment, Geraetetyp *type, NetzplanDatenbank *db) : id(id), _house(house), _apt(apt), _pos(pos), _name(name), _mac(mac), _serial(serial), _comment(comment), _type(type), db(db) {};
+    void setself(std::weak_ptr<Geraet> s) {self = s;}
+    
     unsigned id;
     int _house;
     int _apt;
@@ -104,10 +112,7 @@ class Geraet {
     NetzplanDatenbank *db;
     std::weak_ptr<Geraet> self;
 
-    public:
-    Geraet(unsigned id, int house, int apt, int pos, str name, str mac, str serial, str comment, Geraetetyp *type, NetzplanDatenbank *db) : id(id), _house(house), _apt(apt), _pos(pos), _name(name), _mac(mac), _serial(serial), _comment(comment), _type(type), db(db) {};
-    void setself(std::weak_ptr<Geraet> s) {self = s;}
-
+public:
     int house() {return _house;}
     int apt() {return _apt;}
     int pos() {return _pos;}
