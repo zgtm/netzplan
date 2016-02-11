@@ -15,37 +15,41 @@ Kommandos: liste, neu, glas, verschiebe, lies, schreib
 Syntax:
 
     netzplan
-    netzplan liste [<haus> [<pos>] | <geraetename> | <geraetetyp>]
-    netzplan [neu|glas] <haus> <pos> <port> [<haus>] <pos> <port> 
-        [[<haus>] <pos> <port> [[<haus>] <pos> <port> … ]]
+    netzplan liste [<wohnung> [<pos>] | <geraetename> | <geraetetyp>]
+    netzplan [neu|glas] <wohnung> <pos> <port> [<wohnung>] <pos> <port> 
+        [[<wohnung>] <pos> <port> [[<wohnung>] <pos> <port> … ]]
     netzplan verschiebe <geraetename> <pos>
     netzplan lies <datei>
     netzplan schreib
+
+Wobei
+
+    <wohnung> := <haus>/<apartment>
 
 Beschreibung:
 
     netzplan
     netzplan liste
       Allgmeine Übersicht anzeigen
-    netzplan liste <haus>
-      Geräte im Haus anzeigen
-    netzplan liste <haus> <pos>
+    netzplan liste <wohnung>
+      Geräte in Wohnung anzeigen
+    netzplan liste <wohnung> <pos>
       Verbindungen vom Gerät anzeigen
     netzplan liste <geraetename>
       Verbindungen vom Gerät anzeigen
     netzplan liste <geraetetyp>
       Alle Gerät vom Gerätetyp anzeigen
-    netzplan neu <haus> <pos> <port> <pos> <port>
-      Neue Patchverbindung in Haus
-    netzplan neu <haus> <pos> <port> <haus> <pos> <port>
-      Neue Kabelverbindung von Haus zu Haus
-      Für Verbindungen zur Dose im gleichen Haus, zweimal das 
-        gleiche Haus angeben
-    netzplan neu <haus> <pos> <port> [<haus>] <pos> <port> …
+    netzplan neu <wohnung> <pos> <port> <pos> <port>
+      Neue Patchverbindung in Wohnung
+    netzplan neu <wohnung> <pos> <port> <wohnung> <pos> <port>
+      Neue Kabelverbindung von Wohnung zu Wohnung
+      Für Verbindungen zur Dose im gleichen Wohnung, zweimal die 
+        gleiche Wohnung angeben
+    netzplan neu <wohnung> <pos> <port> [<wohnung>] <pos> <port> …
       Mehrere zusammenhängende Kabel- und Patchverbindungen
     netzplan glas …
       Wie 'netzplan neu', setzt Typ auf Glasfaser
-    netzplan verschiebe <geraetename> [<haus>] <pos>
+    netzplan verschiebe <geraetename> [<wohnung>] <pos>
       Verschiebt das Gerät an die Position
     netzplan lies <datei>
       Liest Netzkonfiguration aus Datei
